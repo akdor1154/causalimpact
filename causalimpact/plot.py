@@ -23,11 +23,12 @@ import pandas as pd
 
 
 class Plot(object):
+
     """Takes all the vectors and final analysis performed in the post-period inference
     to plot final graphics.
     """
-    def plot(self, panels=['original', 'pointwise', 'cumulative'], figsize=(15, 12)):
-        """Plots inferences results related to causal impact analysis.
+    def build_figure(self, panels=['original', 'pointwise', 'cumulative'], figsize=(15, 12)):
+        """Builds a matplotlib figure to show the inferences results related to causal impact analysis.
 
         Args
         ----
@@ -35,6 +36,11 @@ class Plot(object):
             Indicates which plot should be considered in the graphics.
           figsize: tuple.
             Changes the size of the graphics plotted.
+
+        Returns
+        -------
+          matplotlib.figure.Figure
+            The plotted figure.
 
         Raises
         ------
@@ -125,6 +131,25 @@ class Plot(object):
                     'diffuse initialization.'.format(llb))
             fig.text(0.1, 0.01, text, fontsize='large')
 
+        return fig
+
+    def plot(self, panels=['original', 'pointwise', 'cumulative'], figsize=(15, 12)):
+        """Builds a matplotlib figure to show the inferences results related to causal impact analysis.
+
+        Args
+        ----
+          panels: list.
+            Indicates which plot should be considered in the graphics.
+          figsize: tuple.
+            Changes the size of the graphics plotted.
+
+        Raises
+        ------
+          RuntimeError: if inferences were not computed yet.
+        """
+
+        plt = self._get_plotter()
+        fig = self.build_figure(panels=panels, figsize=figsize)
         plt.show()
 
     def _get_plotter(self):  # pragma: no cover

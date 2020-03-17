@@ -27,8 +27,10 @@ class Plot(object):
     """Takes all the vectors and final analysis performed in the post-period inference
     to plot final graphics.
     """
-    def build_figure(self, panels=['original', 'pointwise', 'cumulative'], figsize=(15, 12)):
-        """Builds a matplotlib figure to show the inferences results related to causal impact analysis.
+    def build_figure(self, panels=['original', 'pointwise', 'cumulative'],
+                     figsize=(15, 12)):
+        """Builds a matplotlib figure to show the inferences results related to Causal
+        Impact analysis.
 
         Args
         ----
@@ -37,10 +39,10 @@ class Plot(object):
           figsize: tuple.
             Changes the size of the graphics plotted.
 
-        Returns
+        Properties
         -------
-          matplotlib.figure.Figure
-            The plotted figure.
+          fig: matplotlib.figure.Figure
+            The matplotlib figure object that can be used later on for plotting.
 
         Raises
         ------
@@ -131,10 +133,10 @@ class Plot(object):
                     'diffuse initialization.'.format(llb))
             fig.text(0.1, 0.01, text, fontsize='large')
 
-        return fig
+        self.fig = fig
 
     def plot(self, panels=['original', 'pointwise', 'cumulative'], figsize=(15, 12)):
-        """Builds a matplotlib figure to show the inferences results related to causal impact analysis.
+        """Uses the inference data to create graphics and plot them.
 
         Args
         ----
@@ -147,14 +149,16 @@ class Plot(object):
         ------
           RuntimeError: if inferences were not computed yet.
         """
-
         plt = self._get_plotter()
-        fig = self.build_figure(panels=panels, figsize=figsize)
+        try:
+            _ = self.fig
+        except AttributeError:
+            self.fig = self.build_figure(panels=panels, figsize=figsize)
         plt.show()
 
     def _get_plotter(self):  # pragma: no cover
-        """As some environments do not have matplotlib then we import the library through
-        this method which prevents import exceptions.
+        """As some environments do not have matplotlib then we import the library
+        through this method which prevents import exceptions.
 
         Returns
         -------
